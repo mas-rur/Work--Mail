@@ -1,13 +1,10 @@
 import type { ReactNode } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
+import * as HugeiconsReactModule from "@hugeicons/react";
 import {
   ApiIcon,
   AtIcon,
   ArrowRight02Icon,
   ArrowLeft02Icon,
-  BoltIcon,
-  BoldIcon,
-  BadgeCheckIcon,
   AlertCircleIcon,
   Cancel01Icon,
   BrowserIcon,
@@ -17,6 +14,21 @@ import {
   Notification03Icon,
 } from "@hugeicons/core-free-icons";
 import { cn } from "@/lib/utils";
+
+// The named export has shifted across @hugeicons/react versions in the
+// wild — resolve whichever shape is actually published rather than
+// assuming one, so a version bump upstream can't silently break every
+// icon in the app again.
+const HugeiconsIcon = ((HugeiconsReactModule as unknown as Record<string, unknown>)
+  .HugeiconsIcon ??
+  (HugeiconsReactModule as unknown as { default?: unknown }).default ??
+  (HugeiconsReactModule as unknown as (...args: unknown[]) => unknown)) as React.ComponentType<{
+  icon: unknown;
+  size?: number;
+  color?: string;
+  strokeWidth?: number;
+  className?: string;
+}>;
 
 export type IconProps = {
   className?: string;
@@ -43,9 +55,6 @@ export const ApiIconEl = huge(ApiIcon);
 export const AtIconEl = huge(AtIcon);
 export const ArrowRightIconEl = huge(ArrowRight02Icon);
 export const ArrowLeftIconEl = huge(ArrowLeft02Icon);
-export const BoltIconEl = huge(BoltIcon);
-export const BoldIconEl = huge(BoldIcon);
-export const VerifiedIconEl = huge(BadgeCheckIcon);
 export const AlertIconEl = huge(AlertCircleIcon);
 export const CloseIconEl = huge(Cancel01Icon);
 export const DomainIconEl = huge(BrowserIcon);
@@ -80,6 +89,21 @@ export const MailIcon = glyph(
   <>
     <rect x="3" y="5" width="18" height="14" rx="2.5" />
     <path d="M3.5 6.5 12 13l8.5-6.5" />
+  </>
+);
+
+export const BoltIconEl = glyph(
+  <path d="M12.5 3 5 13.5h5.5L11 21l7.5-10.5H13l-.5-7.5z" strokeLinejoin="round" />
+);
+
+export const BoldIconEl = glyph(
+  <path d="M7 4.5h5.2a3.4 3.4 0 0 1 0 6.8H7zM7 11.3h5.8a3.6 3.6 0 0 1 0 7.2H7z" strokeLinejoin="round" />
+);
+
+export const VerifiedIconEl = glyph(
+  <>
+    <path d="M12 3.5l2 1.7 2.6-.3 1 2.4 2.4 1-.3 2.6 1.7 2-1.7 2 .3 2.6-2.4 1-1 2.4-2.6-.3-2 1.7-2-1.7-2.6.3-1-2.4-2.4-1 .3-2.6-1.7-2 1.7-2-.3-2.6 2.4-1 1-2.4 2.6.3z" strokeLinejoin="round" />
+    <path d="M9 12l2 2 4-4.5" />
   </>
 );
 
