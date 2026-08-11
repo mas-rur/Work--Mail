@@ -31,7 +31,7 @@ export function Logo({
 }) {
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
-      <PostmarkMark className="h-7 w-7" />
+      <img src="/logo.png" alt="WorkMail" className="h-7 w-7" />
       {showWordmark && (
         <span
           className={cn(
