@@ -45,6 +45,32 @@ artwork instead:
    (Next.js picks it up automatically), or replace the generated icon in
    `app/icon.tsx`.
 
+The footer also references `/public/mecozx.png` for the "Powered by"
+credit — drop that file into `/public` as well (it isn't included here).
+Until you add it, the footer will show a broken image in that one spot.
+
+## Legal pages, sitemap, and AI discoverability
+
+- **FAQ** (`/faq`), **Privacy Policy** (`/privacy`), and **Terms of Use**
+  (`/terms`) are plain content pages in `app/faq`, `app/privacy`, and
+  `app/terms`. The privacy and terms copy describes exactly what this
+  codebase does (BYOK, local-storage-only persistence, no deliverability
+  guarantee) — **it's a starting point, not legal advice**; have someone
+  review it against your actual jurisdiction and business before you rely
+  on it.
+- Support email is centralized in `lib/site.ts` as `SUPPORT_EMAIL`
+  (`info@workmail.space`) and used across the footer, FAQ, and legal pages
+  — change it in one place if it ever needs to update.
+- `app/sitemap.ts` and `app/robots.ts` are Next.js's built-in conventions;
+  they're served automatically at `/sitemap.xml` and `/robots.txt` with no
+  extra setup. Both read the site's base URL from `SITE_URL` in
+  `lib/site.ts` — update that if you deploy somewhere other than
+  `workmail.space`.
+- `public/llms.txt` follows the emerging [llms.txt](https://llmstxt.org)
+  convention — a plain-text summary of the product aimed at AI assistants
+  and crawlers, served at `/llms.txt`. Update it if the product's scope
+  changes.
+
 ## Stack
 
 - **Next.js (App Router) + TypeScript + Tailwind CSS**
