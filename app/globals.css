@@ -117,3 +117,47 @@
   color: #9aa0ac;
   font-size: 12px;
 }
+
+/* Minimal prose styles for FAQ / Privacy / Terms — kept hand-rolled so we
+   don't need the Tailwind typography plugin as a dependency. */
+.prose-legal h2 {
+  margin-top: 2.25em;
+  margin-bottom: 0.6em;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #12141a;
+}
+.prose-legal h2:first-child {
+  margin-top: 0;
+}
+.prose-legal p {
+  margin-bottom: 1em;
+  font-size: 0.925rem;
+  line-height: 1.7;
+  color: #4b5160;
+}
+.prose-legal ul {
+  margin: 0 0 1.25em 1.25em;
+  list-style: disc;
+}
+.prose-legal li {
+  margin-bottom: 0.5em;
+  font-size: 0.925rem;
+  line-height: 1.7;
+  color: #4b5160;
+}
+.prose-legal strong {
+  color: #12141a;
+  font-weight: 600;
+}
+.prose-legal a {
+  color: #2a3eff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* FAQ accordion — list-style:none doesn't remove WebKit's own marker */
+summary::-webkit-details-marker {
+  display: none;
+}
