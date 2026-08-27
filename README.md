@@ -1,11 +1,12 @@
 # WorkMail
 
-**Your Api, Your Email.**
+**The control center for your application's email.** *(Your Api, Your Email.)*
 
-A compose window for your own [Resend](https://resend.com) account. Bring
-your own Resend API key, pick an address on your own verified domain
-(`noreply@`, `support@`, `info@`, or anything else), write the email, and
-send — straight through your key, no middleman database.
+Built on your own [Resend](https://resend.com) account. Bring your own
+Resend API key, pick an address on your own verified domain (`noreply@`,
+`support@`, `info@`, or anything else), start from a template or a blank
+message, send — straight through your key, no middleman database. An API
+Playground and multi-client preview round it out for developers.
 
 ## Getting started
 
@@ -29,6 +30,41 @@ app, and it's used only for the request they're making.
   API, and return the result. Nothing is logged or persisted server-side.
 - Sent-mail history, the default domain, and the key itself all live in
   `localStorage` and can be wiped from Settings → **Clear all local data**.
+
+## Templates, API Playground, and testing
+
+All three are new on top of the original Compose/History/Settings flow —
+none of them needed a new dependency or a new env var.
+
+- **Templates** (`lib/templates.ts`, `components/templates/`) — seven
+  starting points (welcome, OTP, invoice, password reset, payment
+  confirmation, contact form, developer notification) with
+  `{{mustache}}`-style placeholders. Picking one opens a dialog to fill in
+  the variables, then writes the result straight into the Compose editor
+  via `RichTextEditorHandle.setHtml()`.
+- **API Playground** (`lib/code-snippets.ts`,
+  `components/playground/api-playground.tsx`) — build a from/to/subject/
+  HTML request and get matching cURL, JavaScript, Python, PHP, Node.js
+  (using the `resend` SDK), and React code. The React tab deliberately
+  posts to your own backend instead of calling Resend directly, since
+  embedding a secret key in browser code is unsafe. **The displayed API
+  key is masked by default** (a "Reveal API key" toggle un-masks it) so
+  the view is safe to screenshot or screen-share — Copy always pastes the
+  real, working code regardless of the toggle. There's also a "Send this
+  request" button that fires the exact request through the existing
+  `/api/send` relay.
+- **Testing** — "Send test to myself" in Compose uses a test address saved
+  in Settings (`settingsStore.getTestEmail`/`setTestEmail` in
+  `lib/storage.ts`) and sends the current draft there with the subject
+  prefixed `[Test]`. "Preview" opens a dialog
+  (`components/compose/client-preview-dialog.tsx`) that renders the
+  current HTML inside Gmail/Outlook/Apple Mail-styled frames via a
+  sandboxed `<iframe>`, alongside pattern-based Outlook compatibility
+  notes (`lib/email-compat.ts`) — flexbox/grid, background images,
+  embedded SVG, and similar things Outlook desktop's Word engine handles
+  differently. This is real HTML rendered in the visitor's own browser,
+  framed to resemble each client — not each client's actual rendering
+  engine — and the dialog says so.
 
 ## Branding — swapping in your own logo
 
