@@ -10,17 +10,17 @@ export default function PrivacyPage() {
   return (
     <LegalLayout title="Privacy Policy" updated="August 2026">
       <p>
-        WorkMail ("we", "us") provides a browser-based interface for sending
-        email through your own Resend account. This page explains what data
-        WorkMail touches, and — just as importantly — what it doesn't.
+        WorkMail ("we", "us") is the control center for your application's
+        email, built on your own Resend account. This page explains what
+        data WorkMail touches, and — just as importantly — what it doesn't.
       </p>
 
       <h2>The short version</h2>
       <p>
-        Your Resend API key, sending domain, and sent-mail history are
-        stored only in your browser's local storage. WorkMail does not
-        operate a database, and does not have server-side accounts, logins,
-        or user profiles.
+        Your Resend API key, sending domain, test email address, and
+        sent-mail history are stored only in your browser's local storage.
+        WorkMail does not operate a database, and does not have
+        server-side accounts, logins, or user profiles.
       </p>
 
       <h2>What we collect</h2>
@@ -59,6 +59,38 @@ export default function PrivacyPage() {
         request is sent. You can delete it at any time from WorkMail's
         Settings tab, or by clearing your browser's site data.
       </p>
+
+      <h2>Templates, the API Playground, and testing tools</h2>
+      <p>
+        These don't introduce any new server-side storage — they use the
+        same key and domain already described above.
+      </p>
+      <ul>
+        <li>
+          <strong>Templates</strong> are static content bundled with the
+          app. Choosing one and filling in fields happens entirely in your
+          browser; nothing is sent anywhere until you actually send the
+          resulting email.
+        </li>
+        <li>
+          <strong>The API Playground</strong> generates example code (cURL,
+          JavaScript, Python, PHP, Node.js, React) in your browser, using
+          the key already stored there. If you click{" "}
+          <span className="font-mono">Send this request</span>, that
+          request goes through the same relay described above — used once,
+          not stored.
+        </li>
+        <li>
+          <strong>"Send test to myself"</strong> uses an address you save
+          in Settings, stored locally the same way as your API key and
+          domain. Test sends go through the same relay as a normal send.
+        </li>
+        <li>
+          <strong>Client preview</strong> (Gmail/Outlook/Apple Mail) renders
+          your HTML entirely in your own browser. Nothing is sent to our
+          server or any third party to generate it.
+        </li>
+      </ul>
 
       <h2>Third parties</h2>
       <p>
