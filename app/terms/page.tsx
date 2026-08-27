@@ -16,10 +16,12 @@ export default function TermsPage() {
 
       <h2>What WorkMail is</h2>
       <p>
-        WorkMail is a browser-based interface that lets you send email
-        through your own Resend account using your own API key. WorkMail is
-        not an email service provider, does not host mailboxes, and does
-        not guarantee delivery of any message.
+        WorkMail is the control center for your application's email,
+        built on your own Resend account: compose and send using your own
+        API key, start from a template, preview across email clients, and
+        use the API Playground to get equivalent code for your own app.
+        WorkMail is not an email service provider, does not host
+        mailboxes, and does not guarantee delivery of any message.
       </p>
 
       <h2>Your Resend account and API key</h2>
@@ -28,6 +30,25 @@ export default function TermsPage() {
         everything sent using it through WorkMail — including keeping your
         key confidential. WorkMail relays your requests to Resend on your
         behalf but does not control Resend's service, pricing, or policies.
+      </p>
+      <p>
+        The API Playground displays your key as it would appear in real
+        code, which means it's visible on screen unless you leave the key
+        hidden (the default). Take care when sharing your screen or
+        screenshots while it's revealed.
+      </p>
+
+      <h2>Templates and code samples</h2>
+      <p>
+        Templates and the code generated in the API Playground are generic
+        starting points, not legal, security, or compliance advice.
+        Security-sensitive templates — OTP and password reset in
+        particular — are illustrative; you're responsible for reviewing
+        and adapting them to your own security requirements before use.
+        Generated code samples are illustrative too, not guaranteed
+        production-ready, and you're responsible for reviewing them —
+        including never embedding your API key in client-side or
+        browser-executed code — before using them in your own application.
       </p>
 
       <h2>Acceptable use</h2>
