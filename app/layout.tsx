@@ -24,9 +24,9 @@ const mono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "WorkMail — Your Api, Your Email",
+  title: "WorkMail — The control center for your application's email",
   description:
-    "Bring your own Resend API key and send from noreply@, support@, info@ and more — on your own domain, straight to the inbox.",
+    "Templates, an API Playground with cURL/JS/Python/PHP/Node/React snippets, and one-click test sends across Gmail, Outlook and Apple Mail — all through your own Resend key. Your Api, Your Email.",
 };
 
 export default function RootLayout({
