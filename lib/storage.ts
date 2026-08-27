@@ -26,6 +26,7 @@ const KEYS = {
   verifiedDomains: "workmail:verified-domains",
   history: "workmail:sent-history",
   tourSeen: "workmail:tour-seen",
+  testEmail: "workmail:test-email",
 } as const;
 
 function isBrowser() {
@@ -63,6 +64,9 @@ export const settingsStore = {
   getVerifiedDomains: () => read<string[]>(KEYS.verifiedDomains, []),
   setVerifiedDomains: (domains: string[]) =>
     write(KEYS.verifiedDomains, domains),
+
+  getTestEmail: () => read<string>(KEYS.testEmail, ""),
+  setTestEmail: (email: string) => write(KEYS.testEmail, email),
 
   hasApiKey: () => read<string>(KEYS.apiKey, "").length > 0,
 };
