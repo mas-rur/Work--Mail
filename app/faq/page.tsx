@@ -13,10 +13,12 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "What is WorkMail?",
     a: (
       <p>
-        WorkMail is a compose window for your own Resend account. You bring
-        your own Resend API key, pick a sending address on your verified
-        domain, write the email, and send — the request goes straight
-        through your key to Resend. WorkMail isn't an email provider itself.
+        WorkMail is the control center for your application's email, built
+        on your own Resend account. Compose from your verified domain,
+        start from a template, test how something renders, or use the API
+        Playground to get the equivalent code for your own app — all
+        through your own Resend API key. WorkMail isn't an email provider
+        itself.
       </p>
     ),
   },
@@ -67,6 +69,64 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         verify your domain from your Resend dashboard, then use{" "}
         <span className="font-mono">Sync domains from Resend</span> in
         WorkMail's Settings tab to pull it in.
+      </p>
+    ),
+  },
+  {
+    q: "What are email templates?",
+    a: (
+      <p>
+        Starting points for the emails most apps send — welcome, OTP,
+        invoice, password reset, payment confirmation, contact form, and
+        developer notification. Pick one in the Templates tab, fill in a
+        few fields, and it drops straight into Compose as regular HTML you
+        can keep editing.
+      </p>
+    ),
+  },
+  {
+    q: "Can I customize a template before sending?",
+    a: (
+      <p>
+        Yes — templates are just a starting point. Once inserted into
+        Compose, the content is regular editable text in the rich text
+        editor, the same as anything you'd write from scratch.
+      </p>
+    ),
+  },
+  {
+    q: "What's the API Playground?",
+    a: (
+      <p>
+        A place to build a send request — from, to, subject, HTML — and get
+        matching code in cURL, JavaScript, Python, PHP, Node.js, and React.
+        There's also a "Send this request" button if you want to fire the
+        exact request you're looking at, using your saved key.
+      </p>
+    ),
+  },
+  {
+    q: "Can I send a test email to myself?",
+    a: (
+      <p>
+        Yes — add your address once in Settings under "Testing," then use{" "}
+        <span className="font-mono">Send test to myself</span> in Compose
+        any time. It sends the current draft to that address with "[Test]"
+        prepended to the subject.
+      </p>
+    ),
+  },
+  {
+    q: "How accurate is the Gmail/Outlook/Apple Mail preview?",
+    a: (
+      <p>
+        It renders your actual HTML in your browser, inside a frame styled
+        to resemble each client's layout — it isn't running each client's
+        real rendering engine, so treat it as a strong visual guide, not a
+        pixel-perfect guarantee. Outlook desktop in particular renders HTML
+        differently from a browser (it uses Word's engine), which is why
+        the preview also flags patterns — flexbox, grid, background images,
+        embedded SVG — known to behave differently there.
       </p>
     ),
   },
