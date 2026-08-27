@@ -3,6 +3,9 @@ import {
   AtIconEl,
   VerifiedIconEl,
   BoltIconEl,
+  ReceiptIcon,
+  DomainIconEl,
+  EyeIcon,
 } from "@/components/icons";
 import { TrashIcon, ShieldIcon } from "@/components/icons";
 
@@ -18,6 +21,24 @@ const FEATURES = [
     title: "Address suggestions as you type",
     description:
       "Start typing a prefix and WorkMail suggests noreply, support, info, sales, billing and more — matched to your verified domain.",
+  },
+  {
+    icon: ReceiptIcon,
+    title: "Templates for the emails you send most",
+    description:
+      "Welcome, OTP, invoice, password reset, payment confirmation, contact form, developer alerts — fill in a few fields and drop them into Compose.",
+  },
+  {
+    icon: DomainIconEl,
+    title: "An API Playground built for developers",
+    description:
+      "Build a request once and get matching cURL, JavaScript, Python, PHP, Node.js and React code — or send it straight from the browser.",
+  },
+  {
+    icon: EyeIcon,
+    title: "Test sends and multi-client preview",
+    description:
+      "Fire a one-click test to yourself, or preview how your HTML sits in Gmail, Outlook and Apple Mail before it goes out.",
   },
   {
     icon: VerifiedIconEl,
@@ -54,7 +75,7 @@ export function FeatureGrid() {
             Features
           </span>
           <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-            Everything a transactional inbox needs
+            Everything your app's email needs, in one layer
           </h2>
         </div>
         <div className="grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PostmarkMark } from "@/components/logo";
 import { ArrowRightIconEl, VerifiedIconEl } from "@/components/icons";
 
 export function Hero() {
@@ -10,20 +9,19 @@ export function Hero() {
       <div className="container grid gap-16 py-20 md:grid-cols-2 md:items-center md:py-28">
         <div>
           <Badge variant="neutral" className="mb-6 font-mono uppercase tracking-wide">
-            Bring your own Resend key
+            Templates · API Playground · Testing
           </Badge>
           <h1 className="text-balance font-display text-[2.6rem] font-semibold leading-[1.08] tracking-tight text-ink sm:text-6xl">
-            Send from{" "}
-            <span className="font-mono text-accent">noreply@</span>,{" "}
-            <span className="font-mono text-accent">support@</span>,{" "}
-            <span className="font-mono text-accent">info@</span> —
-            <br />
-            your domain, your key.
+            The control center for your application's email.
           </h1>
           <p className="mt-6 max-w-md text-balance text-lg leading-relaxed text-ink-muted">
-            WorkMail is a compose window for your own Resend account. Pick an
-            address, write the email, hit send — everything ships straight
-            through your API key to your own verified domain.
+            Compose from{" "}
+            <span className="font-mono text-accent">noreply@</span>,{" "}
+            <span className="font-mono text-accent">support@</span>,{" "}
+            <span className="font-mono text-accent">info@</span> — start
+            from a template, test how it renders, or drop straight into the
+            API Playground for cURL, JavaScript, Python, PHP, Node.js and
+            React. All through your own Resend key.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <Button asChild size="lg">
@@ -36,7 +34,10 @@ export function Hero() {
               <a href="#how-it-works">See how it works</a>
             </Button>
           </div>
-          <ul className="mt-9 flex flex-col gap-2 text-sm text-ink-muted">
+          <p className="mt-5 font-mono text-xs uppercase tracking-wide text-ink-faint">
+            Your Api, Your Email
+          </p>
+          <ul className="mt-6 flex flex-col gap-2 text-sm text-ink-muted">
             <li className="flex items-center gap-2">
               <VerifiedIconEl size={16} className="text-success" />
               Your API key stays in your browser's local storage
@@ -51,9 +52,17 @@ export function Hero() {
         <div className="relative mx-auto w-full max-w-md">
           <div className="rounded-xl border border-line bg-white p-5 shadow-pop">
             <div className="mb-4 flex items-center justify-between border-b border-line pb-4">
-              <span className="text-xs font-medium uppercase tracking-wide text-ink-faint">
-                New message
-              </span>
+              <div className="flex gap-1">
+                <span className="rounded-md bg-surface px-2 py-1 text-[11px] font-medium text-ink">
+                  Compose
+                </span>
+                <span className="px-2 py-1 text-[11px] font-medium text-ink-faint">
+                  Templates
+                </span>
+                <span className="px-2 py-1 text-[11px] font-medium text-ink-faint">
+                  Playground
+                </span>
+              </div>
               <span className="flex gap-1.5">
                 <span className="h-2.5 w-2.5 rounded-full bg-line" />
                 <span className="h-2.5 w-2.5 rounded-full bg-line" />

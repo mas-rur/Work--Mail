@@ -18,7 +18,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { KeyIcon, EyeIcon, EyeOffIcon, RefreshIcon, DomainIconEl, VerifiedIconEl, TrashIcon } from "@/components/icons";
+import { KeyIcon, EyeIcon, EyeOffIcon, RefreshIcon, DomainIconEl, VerifiedIconEl, TrashIcon, MailIcon } from "@/components/icons";
 
 type DomainEntry = { name: string; status: string };
 
@@ -32,10 +32,12 @@ export function ApiKeySettings({
   const [domains, setDomains] = useState<DomainEntry[]>([]);
   const [defaultDomain, setDefaultDomain] = useState("");
   const [loading, setLoading] = useState(false);
+  const [testEmail, setTestEmail] = useState("");
 
   useEffect(() => {
     setApiKey(settingsStore.getApiKey());
     setDefaultDomain(settingsStore.getDomain());
+    setTestEmail(settingsStore.getTestEmail());
     const cached = settingsStore.getVerifiedDomains();
     if (cached.length) {
       setDomains(cached.map((name) => ({ name, status: "verified" })));
@@ -90,6 +92,11 @@ export function ApiKeySettings({
   const pickDefault = (name: string) => {
     setDefaultDomain(name);
     settingsStore.setDomain(name);
+  };
+
+  const saveTestEmail = () => {
+    settingsStore.setTestEmail(testEmail.trim());
+    toast.success("Test email saved");
   };
 
   return (
@@ -185,6 +192,34 @@ export function ApiKeySettings({
 
       <Card className="lg:col-span-2">
         <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <MailIcon size={18} className="text-accent" />
+            Testing
+          </CardTitle>
+          <CardDescription>
+            The address WorkMail uses for "Send test to myself" in Compose.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Label htmlFor="test-email">Your test email</Label>
+          <div className="mt-1.5 flex gap-2">
+            <Input
+              id="test-email"
+              type="email"
+              value={testEmail}
+              onChange={(e) => setTestEmail(e.target.value)}
+              placeholder="you@example.com"
+              className="flex-1"
+            />
+            <Button variant="outline" onClick={saveTestEmail}>
+              Save
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="lg:col-span-2">
+        <CardHeader>
           <CardTitle className="flex items-center gap-2 text-stamp">
             <TrashIcon size={18} />
             Local data
@@ -220,6 +255,7 @@ export function ApiKeySettings({
                       setApiKey("");
                       setDomains([]);
                       setDefaultDomain("");
+                      setTestEmail("");
                       toast.success("Local data cleared");
                     }}
                   >

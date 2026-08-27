@@ -227,6 +227,13 @@ export const PlusIcon = glyph(<path d="M12 5v14M5 12h14" />);
 
 export const CheckIcon = glyph(<path d="M4.5 12.5l5 5 10-11" />);
 
+export const ReceiptIcon = glyph(
+  <>
+    <path d="M6 3.5h12v17l-2.5-1.5-2 1.5-2-1.5-2 1.5-2-1.5L6 20.5z" strokeLinejoin="round" />
+    <path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5" />
+  </>
+);
+
 export const GlobeIcon = glyph(
   <>
     <circle cx="12" cy="12" r="8.5" />

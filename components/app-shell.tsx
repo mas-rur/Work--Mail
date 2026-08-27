@@ -7,7 +7,9 @@ import "driver.js/dist/driver.css";
 import { Logo } from "@/components/logo";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ComposeForm } from "@/components/compose-form";
+import { ComposeForm, type TemplateSeed } from "@/components/compose-form";
+import { TemplateGallery } from "@/components/templates/template-gallery";
+import { ApiPlayground } from "@/components/playground/api-playground";
 import { SentHistory } from "@/components/sent-history";
 import { ApiKeySettings } from "@/components/api-key-settings";
 import { settingsStore, tourStore } from "@/lib/storage";
@@ -25,7 +27,7 @@ function buildTour() {
         popover: {
           title: "Welcome to WorkMail",
           description:
-            "A compose window for your own Resend account. Quick tour — four stops.",
+            "The control center for your application's email. Quick tour — six stops.",
           side: "bottom",
         },
       },
@@ -39,29 +41,39 @@ function buildTour() {
         },
       },
       {
+        element: "#tour-tab-templates",
+        popover: {
+          title: "2. Start from a template",
+          description:
+            "Welcome emails, OTPs, invoices, password resets and more — fill in a few fields and drop them into Compose.",
+          side: "bottom",
+        },
+      },
+      {
         element: "#tour-from",
         popover: {
-          title: "2. Pick an address",
+          title: "3. Pick an address",
           description:
             "Type a prefix and WorkMail suggests noreply, support, info and more — paired with your domain.",
           side: "top",
         },
       },
       {
-        element: "#tour-editor",
+        element: "#tour-send",
         popover: {
-          title: "3. Write the message",
-          description: "A small toolbar covers bold, italic, lists and links.",
+          title: "4. Send, test, or preview",
+          description:
+            "Send for real, fire a one-click test to yourself, or preview how it renders across Gmail, Outlook and Apple Mail.",
           side: "top",
         },
       },
       {
-        element: "#tour-send",
+        element: "#tour-tab-playground",
         popover: {
-          title: "4. Send",
+          title: "5. The API Playground",
           description:
-            "This goes straight through your Resend key to your domain, and gets logged in History.",
-          side: "top",
+            "Build a request and get matching cURL, JavaScript, Python, PHP, Node.js and React code — or send it directly.",
+          side: "bottom",
         },
       },
       {
@@ -82,6 +94,7 @@ export function AppShell() {
   const [hasApiKey, setHasApiKey] = useState(false);
   const [domains, setDomains] = useState<string[]>([]);
   const [defaultDomain, setDefaultDomain] = useState("");
+  const [templateSeed, setTemplateSeed] = useState<TemplateSeed | null>(null);
   const tourRef = useRef<ReturnType<typeof buildTour> | null>(null);
 
   useEffect(() => {
@@ -105,6 +118,11 @@ export function AppShell() {
       tourRef.current = buildTour();
       tourRef.current.drive();
     }, 60);
+  };
+
+  const useTemplate = (subject: string, html: string) => {
+    setTemplateSeed((prev) => ({ subject, html, seq: (prev?.seq ?? 0) + 1 }));
+    setTab("compose");
   };
 
   return (
@@ -132,6 +150,12 @@ export function AppShell() {
             <TabsTrigger id="tour-tab-compose" value="compose">
               Compose
             </TabsTrigger>
+            <TabsTrigger id="tour-tab-templates" value="templates">
+              Templates
+            </TabsTrigger>
+            <TabsTrigger id="tour-tab-playground" value="playground">
+              API Playground
+            </TabsTrigger>
             <TabsTrigger id="tour-tab-history" value="history">
               History
             </TabsTrigger>
@@ -145,8 +169,17 @@ export function AppShell() {
               domains={domains}
               defaultDomain={defaultDomain}
               hasApiKey={hasApiKey}
+              templateSeed={templateSeed}
               onGoToSettings={() => setTab("settings")}
             />
+          </TabsContent>
+
+          <TabsContent value="templates">
+            <TemplateGallery onUseTemplate={useTemplate} />
+          </TabsContent>
+
+          <TabsContent value="playground">
+            <ApiPlayground />
           </TabsContent>
 
           <TabsContent value="history">

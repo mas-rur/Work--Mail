@@ -20,6 +20,7 @@ export type RichTextEditorHandle = {
   getHtml: () => string;
   getText: () => string;
   clear: () => void;
+  setHtml: (html: string) => void;
 };
 
 function ToolbarButton({
@@ -61,6 +62,12 @@ export const RichTextEditor = forwardRef<
     getText: () => editorRef.current?.innerText ?? "",
     clear: () => {
       if (editorRef.current) editorRef.current.innerHTML = "";
+    },
+    setHtml: (html: string) => {
+      if (editorRef.current) {
+        editorRef.current.innerHTML = html;
+        emitChange();
+      }
     },
   }));
 

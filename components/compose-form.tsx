@@ -6,20 +6,25 @@ import { settingsStore, historyStore } from "@/lib/storage";
 import { FromAddressSelect } from "@/components/from-address-select";
 import { RichTextEditor, type RichTextEditorHandle } from "@/components/rich-text-editor";
 import { DeliverabilityTips } from "@/components/deliverability-tips";
+import { ClientPreviewDialog } from "@/components/compose/client-preview-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { AlertIconEl, SendIcon } from "@/components/icons";
+import { AlertIconEl, SendIcon, EyeIcon, RefreshIcon } from "@/components/icons";
+
+export type TemplateSeed = { subject: string; html: string; seq: number };
 
 export function ComposeForm({
   domains,
   defaultDomain,
   hasApiKey,
+  templateSeed,
   onGoToSettings,
 }: {
   domains: string[];
   defaultDomain: string;
   hasApiKey: boolean;
+  templateSeed?: TemplateSeed | null;
   onGoToSettings: () => void;
 }) {
   const [prefix, setPrefix] = useState("noreply");
@@ -30,6 +35,9 @@ export function ComposeForm({
   const [bodyHtml, setBodyHtml] = useState("");
   const [bodyText, setBodyText] = useState("");
   const [sending, setSending] = useState(false);
+  const [sendingTest, setSendingTest] = useState(false);
+  const [testEmail, setTestEmail] = useState("");
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   // `defaultDomain` arrives from a localStorage read in the parent, which
   // resolves a tick after mount — pick it up once it does, but don't
@@ -39,7 +47,22 @@ export function ComposeForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultDomain]);
 
+  useEffect(() => {
+    setTestEmail(settingsStore.getTestEmail());
+  }, []);
+
   const editorRef = useRef<RichTextEditorHandle>(null);
+
+  // Applying a template writes straight into the (largely uncontrolled)
+  // rich text editor via its imperative handle, then syncs local state.
+  useEffect(() => {
+    if (!templateSeed) return;
+    setSubject(templateSeed.subject);
+    editorRef.current?.setHtml(templateSeed.html);
+    setBodyHtml(editorRef.current?.getHtml() ?? templateSeed.html);
+    setBodyText(editorRef.current?.getText() ?? "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [templateSeed?.seq]);
 
   const from = `${prefix}@${domain || "yourdomain.com"}`;
   const domainVerified = domains.includes(domain);
@@ -59,6 +82,25 @@ export function ComposeForm({
     setBodyHtml("");
     setBodyText("");
     editorRef.current?.clear();
+  };
+
+  const doSend = async (overrideTo: string, subjectPrefix = "") => {
+    const apiKey = settingsStore.getApiKey();
+    const res = await fetch("/api/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        apiKey,
+        from,
+        to: overrideTo,
+        subject: `${subjectPrefix}${subject}`,
+        html: bodyHtml,
+        text: bodyText,
+        replyTo: replyTo.trim() || undefined,
+      }),
+    });
+    const data = await res.json();
+    return { ok: res.ok, data };
   };
 
   const handleSend = async () => {
@@ -83,22 +125,9 @@ export function ComposeForm({
 
     setSending(true);
     try {
-      const res = await fetch("/api/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          apiKey,
-          from,
-          to: to.trim(),
-          subject,
-          html: bodyHtml,
-          text: bodyText,
-          replyTo: replyTo.trim() || undefined,
-        }),
-      });
-      const data = await res.json();
+      const { ok, data } = await doSend(to.trim());
 
-      if (!res.ok) {
+      if (!ok) {
         historyStore.add({
           id: crypto.randomUUID(),
           from,
@@ -130,6 +159,38 @@ export function ComposeForm({
       toast.error("Network error — the email was not sent");
     } finally {
       setSending(false);
+    }
+  };
+
+  const handleSendTest = async () => {
+    const apiKey = settingsStore.getApiKey();
+    if (!apiKey) {
+      toast.error("Add your Resend API key in Settings first");
+      onGoToSettings();
+      return;
+    }
+    if (!testEmail.trim()) {
+      toast.error("Add your test email in Settings first");
+      onGoToSettings();
+      return;
+    }
+    if (!domain) {
+      toast.error("Enter a sending domain");
+      return;
+    }
+
+    setSendingTest(true);
+    try {
+      const { ok, data } = await doSend(testEmail.trim(), "[Test] ");
+      if (!ok) {
+        toast.error(data.error || "Test send failed");
+        return;
+      }
+      toast.success(`Test sent to ${testEmail.trim()}`);
+    } catch {
+      toast.error("Network error — the test email was not sent");
+    } finally {
+      setSendingTest(false);
     }
   };
 
@@ -205,10 +266,32 @@ export function ComposeForm({
           </div>
         </div>
 
-        <div className="flex items-center justify-between border-t border-line pt-4">
-          <p className="text-xs text-ink-faint">
-            Sends through your own Resend account.
-          </p>
+        <div className="flex flex-col gap-3 border-t border-line pt-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setPreviewOpen(true)}
+            >
+              <EyeIcon size={14} />
+              Preview
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleSendTest}
+              disabled={sendingTest}
+            >
+              {sendingTest ? (
+                <RefreshIcon size={14} className="animate-spin" />
+              ) : (
+                <SendIcon size={14} />
+              )}
+              {sendingTest ? "Sending…" : "Send test to myself"}
+            </Button>
+          </div>
           <Button id="tour-send" size="lg" onClick={handleSend} disabled={sending}>
             <SendIcon size={16} />
             {sending ? "Sending…" : "Send email"}
@@ -222,6 +305,14 @@ export function ComposeForm({
         subjectTooShoutyOrSpammy={subjectTooShoutyOrSpammy}
         hasPlainText={bodyText.trim().length > 0}
         hasReplyContent={bodyText.trim().length > 10}
+      />
+
+      <ClientPreviewDialog
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        html={bodyHtml}
+        subject={subject}
+        from={from}
       />
     </div>
   );
